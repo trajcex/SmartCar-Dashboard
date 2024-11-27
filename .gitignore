@@ -1,32 +1,70 @@
-# Prerequisites
-*.d
+packages/
 
 # Compiled Object files
-*.slo
-*.lo
 *.o
 *.obj
 
-# Precompiled Headers
-*.gch
-*.pch
+# Compiled Static Libraries
+*.lib
+*.a
 
-# Compiled Dynamic libraries
+# Compiled Dynamic Libraries
+*.dll
 *.so
 *.dylib
-*.dll
 
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
+# Executable files
 *.exe
 *.out
 *.app
+
+# Debugging files
+*.pdb
+*.ilk
+*.dSYM/
+
+# Build Directories
+build/
+cmake-build-debug/
+cmake-build-release/
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln
+*.ncb
+*.cache
+*.csproj
+*.vcxproj
+*.vcxproj.filters
+
+# OS-specific Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and Temporary Files
+*.log
+*.temp
+*.tmp
+
+# CMake Files
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+
+# OpenGL Dependencies
+# Ignore locally installed dependencies (if any)
+external/
+
+# Ignore GLFW or GLAD build artifacts if included in the project
+glfw/build/
+glad/build/
+
+# Others
+*.swp
+*.swo
