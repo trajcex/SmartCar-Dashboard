@@ -32,14 +32,10 @@ cmake-build-release/
 .vscode/
 .idea/
 *.suo
-*.user
 *.userosscache
-*.sln
 *.ncb
 *.cache
-*.csproj
-*.vcxproj
-*.vcxproj.filters
+
 
 # OS-specific Files
 .DS_Store
