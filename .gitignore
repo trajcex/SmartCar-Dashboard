@@ -31,6 +31,7 @@ cmake-build-release/
 # IDE and Editor Files
 .vscode/
 .idea/
+.vs/
 *.suo
 *.userosscache
 *.ncb
