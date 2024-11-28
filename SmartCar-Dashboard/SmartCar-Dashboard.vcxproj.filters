@@ -18,8 +18,24 @@
     <ClCompile Include="SmartCar-Dashboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderUtils\ShaderUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Callback\Callback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="ShaderUtils\Shader\basic.frag" />
+    <None Include="ShaderUtils\Shader\basic.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ShaderUtils\ShaderUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Callback\Callback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
