@@ -12,6 +12,7 @@
 
 #include "ShaderUtils/ShaderUtils.h"
 #include "Callback/Callback.h"
+#include "Car/TestBed.h"
 
 const double TARGET_FPS = 120.0;
 const double FPS = 1.0 / TARGET_FPS;
@@ -19,6 +20,9 @@ const std::string SHADER_PATH = "ShaderUtils/Shader/";
 
 int main()
 {
+ 
+    Car car = getCar();
+
     if (!glfwInit()) {
         std::cout << "GLFW Biblioteka se nije ucitala! :(\n";
         return 1;
@@ -91,6 +95,7 @@ int main()
     float triangleX = 0.0;
     float triangleY = 0.0;
 
+    startSimulation(&car);
     while (!glfwWindowShouldClose(window)) {
         double currentTime = glfwGetTime();
         double elapsedTime = currentTime - previousTime;
@@ -103,6 +108,10 @@ int main()
         previousTime = currentTime;
 
         glfwGetFramebufferSize(window, &wWidth, &wHeight);
+
+        float speed = car.getSpeed();
+        std::cout << "Speed: " << speed << std::endl;
+
         glUseProgram(basicShader);
 
         aspectRatio = (float)wHeight / (float)wWidth;
@@ -140,6 +149,8 @@ int main()
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    endSimulation(&car);
 
     glDeleteProgram(basicShader);
     glDeleteBuffers(1, &VBO);

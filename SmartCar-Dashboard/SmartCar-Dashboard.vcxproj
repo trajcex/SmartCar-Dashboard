@@ -129,6 +129,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Callback\Callback.cpp" />
+    <ClCompile Include="Car\car.cpp" />
+    <ClCompile Include="Car\TestBed.cpp" />
     <ClCompile Include="ShaderUtils\ShaderUtils.cpp" />
     <ClCompile Include="SmartCar-Dashboard.cpp" />
   </ItemGroup>
@@ -139,6 +141,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Callback\Callback.h" />
+    <ClInclude Include="Car\car.h" />
+    <ClInclude Include="Car\TestBed.h" />
     <ClInclude Include="ShaderUtils\ShaderUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

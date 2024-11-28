@@ -24,6 +24,12 @@
     <ClCompile Include="Callback\Callback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Car\car.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Car\TestBed.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -35,6 +41,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Callback\Callback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Car\car.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Car\TestBed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
