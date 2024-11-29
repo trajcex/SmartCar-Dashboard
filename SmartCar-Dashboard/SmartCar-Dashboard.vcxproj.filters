@@ -30,6 +30,9 @@
     <ClCompile Include="Car\TestBed.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderUtils\state.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -49,5 +52,28 @@
     <ClInclude Include="Car\TestBed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderUtils\state.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\speedometer.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\map.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\visor.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\arrow-left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\arrow.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

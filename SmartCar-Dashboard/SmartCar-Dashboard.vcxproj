@@ -132,6 +132,7 @@
     <ClCompile Include="Car\car.cpp" />
     <ClCompile Include="Car\TestBed.cpp" />
     <ClCompile Include="ShaderUtils\ShaderUtils.cpp" />
+    <ClCompile Include="ShaderUtils\state.cpp" />
     <ClCompile Include="SmartCar-Dashboard.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +145,15 @@
     <ClInclude Include="Car\car.h" />
     <ClInclude Include="Car\TestBed.h" />
     <ClInclude Include="ShaderUtils\ShaderUtils.h" />
+    <ClInclude Include="ShaderUtils\state.h" />
+    <ClInclude Include="stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\arrow-left.png" />
+    <Image Include="res\arrow.png" />
+    <Image Include="res\map.jpg" />
+    <Image Include="res\speedometer.png" />
+    <Image Include="res\visor.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
