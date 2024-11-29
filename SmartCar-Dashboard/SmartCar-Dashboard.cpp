@@ -10,7 +10,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "ShaderUtils/ShaderUtils.h"
+#include "ShaderUtils/Shader.h"
 #include "Callback/Callback.h"
 #include "Car/TestBed.h"
 #include "ShaderUtils/state.h"
@@ -108,8 +108,7 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    unsigned int basicShader = createShader((SHADER_PATH+"basic.vert").c_str(), (SHADER_PATH+"basic.frag").c_str());
-    
+    Shader basicShader((SHADER_PATH + "basic.vert").c_str(), (SHADER_PATH + "basic.frag").c_str());
     unsigned checkerTexture = loadImageToTexture("res/speedometer.png");
     glBindTexture(GL_TEXTURE_2D, checkerTexture);
     glGenerateMipmap(GL_TEXTURE_2D); 
@@ -118,10 +117,9 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glBindTexture(GL_TEXTURE_2D, 0);
-    glUseProgram(basicShader);
-    unsigned uTexLoc = glGetUniformLocation(basicShader, "uTex");
-    glUniform1i(uTexLoc, 0);
-    glUseProgram(0);
+    basicShader.use();
+    basicShader.setFloat("uTex", 0);
+    basicShader.stop();
 
     unsigned mapTexture = loadImageToTexture("res/map.jpg");
     glBindTexture(GL_TEXTURE_2D, mapTexture);
@@ -131,9 +129,9 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glBindTexture(GL_TEXTURE_2D, 0);
-    glUseProgram(basicShader);
-    glUniform1i(uTexLoc, 0);
-    glUseProgram(0);
+    basicShader.use();
+    basicShader.setFloat("uTex", 0);
+    basicShader.stop();
 
     unsigned visorTexture = loadImageToTexture("res/visor.png");
     glBindTexture(GL_TEXTURE_2D, visorTexture);
@@ -143,9 +141,9 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glBindTexture(GL_TEXTURE_2D, 0);
-    glUseProgram(basicShader);
-    glUniform1i(uTexLoc, 0);
-    glUseProgram(0);
+    basicShader.use();
+    basicShader.setFloat("uTex", 0);
+    basicShader.stop();
     unsigned leftArrowTexture = loadImageToTexture("res/arrow.png");
     glBindTexture(GL_TEXTURE_2D, leftArrowTexture);
     glGenerateMipmap(GL_TEXTURE_2D);
@@ -154,13 +152,13 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glBindTexture(GL_TEXTURE_2D, 0);
-    glUseProgram(basicShader);
-    glUniform1i(uTexLoc, 0);
-    glUseProgram(0);
+    basicShader.use();
+    basicShader.setFloat("uTex", 0);
+    basicShader.stop();
     glClearColor(0.5, 0.5, 0.5, 1.0);
     
 
-    unsigned uColLoc = glGetUniformLocation(basicShader, "uCol");
+    unsigned uColLoc = glGetUniformLocation(basicShader.ID, "uCol");
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -181,14 +179,14 @@ int main()
         /*float speed = car.getSpeed();
         std::cout << "Speed: " << speed << std::endl;*/
 
-        glUseProgram(basicShader);
+        basicShader.use();
         glClear(GL_COLOR_BUFFER_BIT);
 
 
 
         glBindVertexArray(VAO);
-        unsigned modelLoc = glGetUniformLocation(basicShader, "model");
-        unsigned blinkLoc = glGetUniformLocation(basicShader, "blink");
+        unsigned modelLoc = glGetUniformLocation(basicShader.ID, "model");
+        unsigned blinkLoc = glGetUniformLocation(basicShader.ID, "blink");
 
         glActiveTexture(GL_TEXTURE0);
         glm::mat4 modell = glm::mat4(1.0f);
@@ -261,7 +259,7 @@ int main()
         glBindVertexArray(0);
        
         
-        glUseProgram(0);
+        basicShader.stop();
 
         frameCounter++;
 
@@ -273,7 +271,7 @@ int main()
 
     glDisable(GL_BLEND);
 
-    glDeleteProgram(basicShader);
+    basicShader.destroy();
     glDeleteBuffers(1, &VBO);
     glDeleteVertexArrays(1, &VAO);
 

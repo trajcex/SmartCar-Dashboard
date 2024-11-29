@@ -131,7 +131,7 @@
     <ClCompile Include="Callback\Callback.cpp" />
     <ClCompile Include="Car\car.cpp" />
     <ClCompile Include="Car\TestBed.cpp" />
-    <ClCompile Include="ShaderUtils\ShaderUtils.cpp" />
+    <ClCompile Include="ShaderUtils\Shader.cpp" />
     <ClCompile Include="ShaderUtils\state.cpp" />
     <ClCompile Include="SmartCar-Dashboard.cpp" />
   </ItemGroup>
@@ -144,7 +144,7 @@
     <ClInclude Include="Callback\Callback.h" />
     <ClInclude Include="Car\car.h" />
     <ClInclude Include="Car\TestBed.h" />
-    <ClInclude Include="ShaderUtils\ShaderUtils.h" />
+    <ClInclude Include="ShaderUtils\Shader.h" />
     <ClInclude Include="ShaderUtils\state.h" />
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
