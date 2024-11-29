@@ -41,6 +41,9 @@
     <None Include="packages.config" />
     <None Include="ShaderUtils\Shader\basic.frag" />
     <None Include="ShaderUtils\Shader\basic.vert" />
+    <None Include="ShaderUtils\Shader\mix.frag" />
+    <None Include="ShaderUtils\Shader\transform.vert" />
+    <None Include="ShaderUtils\Shader\blink.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderUtils\Shader.h">

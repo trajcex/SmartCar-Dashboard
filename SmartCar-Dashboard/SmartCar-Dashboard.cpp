@@ -16,12 +16,18 @@
 #include "Car/TestBed.h"
 #include "ShaderUtils/state.h"
 
-//#define STB_IMAGE_IMPLEMENTATION
-//#include "ShaderUtils/stb_image.h"
-
-const double TARGET_FPS = 120.0;
-const double FPS = 1.0 / TARGET_FPS;
 const std::string SHADER_PATH = "ShaderUtils/Shader/";
+
+const double TARGET_FPS = 60.0;
+const double FPS = 1.0 / TARGET_FPS;
+
+const double BLINK_DURATION_SECONDS = 3; 
+const double BLINK_INTERVAL_SECONDS = 0.6667; 
+
+const int MAX_BLINK_FRAMES = static_cast<int>(BLINK_DURATION_SECONDS * TARGET_FPS);
+const int BLINK_INTERVAL_FRAMES = static_cast<int>(BLINK_INTERVAL_SECONDS * TARGET_FPS);
+const int HALF_BLINK_INTERVAL = BLINK_INTERVAL_FRAMES / 2;
+
 
 int main()
 {
@@ -80,10 +86,15 @@ int main()
         0.8,0.4 , 1.0,0.0,
 
 
-        0.5,-0.15 , 0.0,1.0,
+        /*0.5,-0.15 , 0.0,1.0,
         0.5,-0.3 , 0.0,0.0,
         0.65,-0.15 , 1.0,1.0,
-        0.65,-0.3 , 1.0,0.0,
+        0.65,-0.3 , 1.0,0.0,*/
+
+        -1.0,1.0, 0.0,1.0,
+        -1.0,-1.0, 0.0,0.0,
+        1.0,1.0, 1.0,1.0,
+        1.0,-1.0, 1.0,0.0,
 
     };
     unsigned int stride = (2 + 2) * sizeof(float);
@@ -109,28 +120,32 @@ int main()
 
     Shader basicShader((SHADER_PATH + "basic.vert").c_str(), (SHADER_PATH + "basic.frag").c_str());
     
-    basicShader.use();
+    Shader mixShader((SHADER_PATH + "basic.vert").c_str(), (SHADER_PATH + "mix.frag").c_str());
+    
+    Shader transformShader((SHADER_PATH + "transform.vert").c_str(), (SHADER_PATH + "blink.frag").c_str());
+    mixShader.use();
+    Texture mapTexture("res/map.jpg");
+    basicShader.setFloat("uTex", 0);
+    mixShader.stop();
 
+
+    basicShader.use();
     Texture checkerTexture("res/speedometer.png");
     basicShader.setFloat("uTex", 0);
 
-    Texture mapTexture("res/map.jpg");
-    basicShader.setFloat("uTex", 0);
 
     Texture visorTexture("res/visor.png");
     basicShader.setFloat("uTex", 0);
+    basicShader.stop();
 
+    transformShader.use();
     Texture leftArrowTexture("res/arrow.png");
     basicShader.setFloat("uTex", 0);
-
-    basicShader.stop();
+    transformShader.stop();
 
     glClearColor(0.5, 0.5, 0.5, 1.0);
     
 
-    unsigned uColLoc = glGetUniformLocation(basicShader.ID, "uCol");
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
     double previousTime = glfwGetTime();
@@ -150,90 +165,111 @@ int main()
         /*float speed = car.getSpeed();
         std::cout << "Speed: " << speed << std::endl;*/
 
-        basicShader.use();
         glClear(GL_COLOR_BUFFER_BIT);
 
-
-
         glBindVertexArray(VAO);
-        unsigned modelLoc = glGetUniformLocation(basicShader.ID, "model");
-        unsigned blinkLoc = glGetUniformLocation(basicShader.ID, "blink");
-
-        glActiveTexture(GL_TEXTURE0);
-        glm::mat4 modell = glm::mat4(1.0f);
-
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modell));
 
 
-        mapTexture.bind();
+
+        //BACKGROUND
+        mixShader.use();
+        mixShader.setFloat("mixFactor", 0.15);
         glm::vec4 color1(0.0f, 0.0f, 1.0f, 1.0f); 
-        glUniform4fv(uColLoc, 1, glm::value_ptr(color1));
+        mixShader.setVec4("uCol", color1);
+        glActiveTexture(GL_TEXTURE0);
+        mapTexture.bind();
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         mapTexture.unbind();
-        
+        mixShader.stop();
+
+
+        //SPEEDOMETER
+        basicShader.use();
         glActiveTexture(GL_TEXTURE0);
-        
         checkerTexture.bind();
-        glm::vec4 color(0.0f, 0.0f, 9.0f, 0.0f);
-        glUniform4fv(uColLoc, 1, glm::value_ptr(color));
         glDrawArrays(GL_TRIANGLE_STRIP, 4, 4);
         checkerTexture.unbind();
 
+        //VISOR
         if (drawVisor) {
             glActiveTexture(GL_TEXTURE0);
             visorTexture.bind();
-            glUniform4fv(uColLoc, 1, glm::value_ptr(color));
             glDrawArrays(GL_TRIANGLE_STRIP, 8, 4);
             visorTexture.unbind();
-
         }
+        basicShader.stop();
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glActiveTexture(GL_TEXTURE0);
-        leftArrowTexture.bind();
-        glm::vec4 colorLeft(1.0f, 0.0f, 0.0f, 0.0f);
-        glUniform4fv(uColLoc, 1, glm::value_ptr(colorLeft));
-        glDrawArrays(GL_TRIANGLE_STRIP, 12, 4);
-        leftArrowTexture.unbind();
-
-        glm::mat4 model = glm::mat4(1.0f);
-
-        float x_translation = 0.0;
-        float y_translation = -0.45;
-        model = glm::translate(model, glm::vec3(x_translation, y_translation, 0.0f));
-        float rotation_angle = 180.0f;
-        model = glm::rotate(model, glm::radians(rotation_angle), glm::vec3(0.0f, 0.0f, 1.0f)); 
         
-        if (blinkActive) {
-            int elapsedFrames = frameCounter - blinkStartFrame;
+        transformShader.use();
+        leftArrowTexture.bind();
+        
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.65f, -0.25f, 0.0f));
+        model = glm::scale(model, glm::vec3(0.1f, 0.1f, 1.0f));
 
-            if (elapsedFrames < 20) {
-                if (elapsedFrames % 2 == 0) {
-                    glUniform1f(blinkLoc, 1);
+        if (rightBlinkActive) {
+            int elapsedFrames = frameCounter - rightBlinkStartFrame;
+
+            if (elapsedFrames < MAX_BLINK_FRAMES) {
+                if (elapsedFrames % BLINK_INTERVAL_FRAMES < HALF_BLINK_INTERVAL) {
+                    transformShader.setBool("isBlink", false);
                 }
                 else {
-                    glUniform1f(blinkLoc, 0);
+                    transformShader.setBool("isBlink", true);
                 }
             }
             else {
-                blinkActive = false;
-                blinkStartFrame = 0;
+                transformShader.setBool("isBlink", false);
+                rightBlinkActive = false;
+                rightBlinkStartFrame = 0;
             }
-
         }
-
-
-        glm::vec4 colorrig(1.0f, 0.0f, 0.0f, 1.0f);
-        glActiveTexture(GL_TEXTURE0);
-        leftArrowTexture.bind();
-        glUniform4fv(uColLoc, 1, glm::value_ptr(colorrig));
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glm::vec4 color(1.0f, 0.5f, 0.0f, 1.0f);
+        transformShader.setVec4("uCol", color);
+        transformShader.setMat4("model", model);
+        transformShader.setFloat("mixFactor", 0.1);
         glDrawArrays(GL_TRIANGLE_STRIP, 12, 4);
+        transformShader.setBool("isBlink", false);
+
+
+        if (letfBlinkActive) {
+            int elapsedFrames = frameCounter - leftBlinkStartFrame;
+
+            if (elapsedFrames < MAX_BLINK_FRAMES) {
+                if (elapsedFrames % BLINK_INTERVAL_FRAMES < HALF_BLINK_INTERVAL) {
+                    transformShader.setBool("isBlink", false);
+                }
+                else {
+                    transformShader.setBool("isBlink", true);
+                }
+            }
+            else {
+                transformShader.setBool("isBlink", false);
+                letfBlinkActive = false;
+                leftBlinkStartFrame = 0;
+            }
+        }
+        glm::mat4 model1 = glm::mat4(1.0f);
+        model1 = glm::translate(model1, glm::vec3(-0.65f, -0.25f, 0.0f));
+        model1 = glm::scale(model1, glm::vec3(0.1f, 0.1f, 1.0f));
+        float rotation_angle = 180.0f;
+        model1 = glm::rotate(model1, glm::radians(rotation_angle), glm::vec3(0.0f, 0.0f, 1.0f));
+
+        transformShader.setMat4("model", model1);
+        transformShader.setFloat("mixFactor", 0.1);
+        glDrawArrays(GL_TRIANGLE_STRIP, 12, 4);
+        transformShader.setBool("isBlink", false);
+
         leftArrowTexture.unbind();
+        transformShader.stop();
+        glDisable(GL_BLEND);
+        
 
         glBindVertexArray(0);
        
-        
-        basicShader.stop();
-
         frameCounter++;
 
         glfwSwapBuffers(window);
@@ -242,7 +278,7 @@ int main()
 
     endSimulation(&car);
 
-    glDisable(GL_BLEND);
+    //glDisable(GL_BLEND);
 
     basicShader.destroy();
     glDeleteBuffers(1, &VBO);

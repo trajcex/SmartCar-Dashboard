@@ -5,7 +5,9 @@ layout(location = 1) in vec2 inTex;
 
 out vec2 chTex;
 
+uniform mat4 model;
+
 void main(){
-	gl_Position =  vec4(inPoc.x,inPoc.y, 0.0, 1.0);
+	gl_Position =  model * vec4(inPoc.x,inPoc.y, 0.0, 1.0);
 	chTex = inTex;
 }

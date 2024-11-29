@@ -140,6 +140,9 @@
     <None Include="packages.config" />
     <None Include="ShaderUtils\Shader\basic.frag" />
     <None Include="ShaderUtils\Shader\basic.vert" />
+    <None Include="ShaderUtils\Shader\blink.frag" />
+    <None Include="ShaderUtils\Shader\mix.frag" />
+    <None Include="ShaderUtils\Shader\transform.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Callback\Callback.h" />

@@ -1,21 +1,15 @@
 #version 330 core
 
-in vec2 chCol;
+in vec2 chTex;
 
-out vec4 outCol;
+out vec4 outTex;
 
 uniform sampler2D uTex;
-uniform vec4 uCol;
-uniform float blink;
 
 void main()
 {
-	vec4 texColor = texture(uTex, chCol);
-    if (uCol.a>0.1) {
-        texColor = mix(texColor,uCol,0.15);
-    }
-
-    if(texColor.a < 0.1)
-        discard;
-    outCol = texColor;
+	outTex = texture(uTex, chTex);
+	if (outTex.a<0.1){
+		discard;
+	}
 }

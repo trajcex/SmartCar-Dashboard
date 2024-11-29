@@ -11,8 +11,8 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
     case GLFW_KEY_ESCAPE: glfwSetWindowShouldClose(window, GLFW_TRUE); break;
     case GLFW_KEY_ENTER: std::cout << "ENTER \n"; break;
     case GLFW_KEY_V: if (IsDown) drawVisor = true; break;
-    case GLFW_KEY_LEFT: if (IsDown) blinkActive = true; blinkStartFrame = frameCounter; break;
-    case GLFW_KEY_RIGHT: if (IsDown) std::cout << "RIGHT \n"; break;
+    case GLFW_KEY_LEFT: if (IsDown) letfBlinkActive = true; leftBlinkStartFrame = frameCounter; break;
+    case GLFW_KEY_RIGHT: if (IsDown) rightBlinkActive = true; rightBlinkStartFrame = frameCounter; break;
     }
 }
 
