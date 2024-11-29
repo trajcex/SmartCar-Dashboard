@@ -11,18 +11,17 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "ShaderUtils/Shader.h"
+#include "ShaderUtils/Texture.h"
 #include "Callback/Callback.h"
 #include "Car/TestBed.h"
 #include "ShaderUtils/state.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+//#define STB_IMAGE_IMPLEMENTATION
+//#include "ShaderUtils/stb_image.h"
 
 const double TARGET_FPS = 120.0;
 const double FPS = 1.0 / TARGET_FPS;
 const std::string SHADER_PATH = "ShaderUtils/Shader/";
-static unsigned loadImageToTexture(const char* filePath);
-
 
 int main()
 {
@@ -109,52 +108,23 @@ int main()
     glBindVertexArray(0);
 
     Shader basicShader((SHADER_PATH + "basic.vert").c_str(), (SHADER_PATH + "basic.frag").c_str());
-    unsigned checkerTexture = loadImageToTexture("res/speedometer.png");
-    glBindTexture(GL_TEXTURE_2D, checkerTexture);
-    glGenerateMipmap(GL_TEXTURE_2D); 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    
     basicShader.use();
+
+    Texture checkerTexture("res/speedometer.png");
     basicShader.setFloat("uTex", 0);
+
+    Texture mapTexture("res/map.jpg");
+    basicShader.setFloat("uTex", 0);
+
+    Texture visorTexture("res/visor.png");
+    basicShader.setFloat("uTex", 0);
+
+    Texture leftArrowTexture("res/arrow.png");
+    basicShader.setFloat("uTex", 0);
+
     basicShader.stop();
 
-    unsigned mapTexture = loadImageToTexture("res/map.jpg");
-    glBindTexture(GL_TEXTURE_2D, mapTexture);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    basicShader.use();
-    basicShader.setFloat("uTex", 0);
-    basicShader.stop();
-
-    unsigned visorTexture = loadImageToTexture("res/visor.png");
-    glBindTexture(GL_TEXTURE_2D, visorTexture);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    basicShader.use();
-    basicShader.setFloat("uTex", 0);
-    basicShader.stop();
-    unsigned leftArrowTexture = loadImageToTexture("res/arrow.png");
-    glBindTexture(GL_TEXTURE_2D, leftArrowTexture);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    basicShader.use();
-    basicShader.setFloat("uTex", 0);
-    basicShader.stop();
     glClearColor(0.5, 0.5, 0.5, 1.0);
     
 
@@ -165,6 +135,7 @@ int main()
 
     double previousTime = glfwGetTime();
     startSimulation(&car);
+
     while (!glfwWindowShouldClose(window)) {
         double currentTime = glfwGetTime();
         double elapsedTime = currentTime - previousTime;
@@ -194,33 +165,34 @@ int main()
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modell));
 
 
-        glBindTexture(GL_TEXTURE_2D, mapTexture);
+        mapTexture.bind();
         glm::vec4 color1(0.0f, 0.0f, 1.0f, 1.0f); 
         glUniform4fv(uColLoc, 1, glm::value_ptr(color1));
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        glBindTexture(GL_TEXTURE_2D, 0);
+        mapTexture.unbind();
         
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, checkerTexture);
+        
+        checkerTexture.bind();
         glm::vec4 color(0.0f, 0.0f, 9.0f, 0.0f);
         glUniform4fv(uColLoc, 1, glm::value_ptr(color));
         glDrawArrays(GL_TRIANGLE_STRIP, 4, 4);
-        glBindTexture(GL_TEXTURE_2D, 0);
+        checkerTexture.unbind();
 
         if (drawVisor) {
             glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, visorTexture);
+            visorTexture.bind();
             glUniform4fv(uColLoc, 1, glm::value_ptr(color));
             glDrawArrays(GL_TRIANGLE_STRIP, 8, 4);
-            glBindTexture(GL_TEXTURE_2D, 0);
+            visorTexture.unbind();
 
         }
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, leftArrowTexture);
+        leftArrowTexture.bind();
         glm::vec4 colorLeft(1.0f, 0.0f, 0.0f, 0.0f);
         glUniform4fv(uColLoc, 1, glm::value_ptr(colorLeft));
         glDrawArrays(GL_TRIANGLE_STRIP, 12, 4);
-        glBindTexture(GL_TEXTURE_2D, 0);
+        leftArrowTexture.unbind();
 
         glm::mat4 model = glm::mat4(1.0f);
 
@@ -251,11 +223,12 @@ int main()
 
         glm::vec4 colorrig(1.0f, 0.0f, 0.0f, 1.0f);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, leftArrowTexture);
+        leftArrowTexture.bind();
         glUniform4fv(uColLoc, 1, glm::value_ptr(colorrig));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glDrawArrays(GL_TRIANGLE_STRIP, 12, 4);
-        glBindTexture(GL_TEXTURE_2D, 0);
+        leftArrowTexture.unbind();
+
         glBindVertexArray(0);
        
         
@@ -277,40 +250,4 @@ int main()
 
     glfwTerminate();
     return 0;
-}
-static unsigned loadImageToTexture(const char* filePath) {
-    int TextureWidth;
-    int TextureHeight;
-    int TextureChannels;
-    unsigned char* ImageData = stbi_load(filePath, &TextureWidth, &TextureHeight, &TextureChannels, 0);
-    if (ImageData != NULL)
-    {
-        //Slike se osnovno ucitavaju naopako pa se moraju ispraviti da budu uspravne
-        stbi__vertical_flip(ImageData, TextureWidth, TextureHeight, TextureChannels);
-
-        // Provjerava koji je format boja ucitane slike
-        GLint InternalFormat = -1;
-        switch (TextureChannels) {
-        case 1: InternalFormat = GL_RED; break;
-        case 2: InternalFormat = GL_RG; break;
-        case 3: InternalFormat = GL_RGB; break;
-        case 4: InternalFormat = GL_RGBA; break;
-        default: InternalFormat = GL_RGB; break;
-        }
-
-        unsigned int Texture;
-        glGenTextures(1, &Texture);
-        glBindTexture(GL_TEXTURE_2D, Texture);
-        glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, TextureWidth, TextureHeight, 0, InternalFormat, GL_UNSIGNED_BYTE, ImageData);
-        glBindTexture(GL_TEXTURE_2D, 0);
-        // oslobadjanje memorije zauzete sa stbi_load posto vise nije potrebna
-        stbi_image_free(ImageData);
-        return Texture;
-    }
-    else
-    {
-        std::cout << "Textura nije ucitana! Putanja texture: " << filePath << std::endl;
-        stbi_image_free(ImageData);
-        return 0;
-    }
 }
