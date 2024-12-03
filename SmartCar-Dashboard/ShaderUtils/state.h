@@ -9,4 +9,6 @@ extern int leftBlinkStartFrame;
 extern bool rightBlinkActive;
 extern int rightBlinkStartFrame;
 
+extern int accelerator;
+
 #endif

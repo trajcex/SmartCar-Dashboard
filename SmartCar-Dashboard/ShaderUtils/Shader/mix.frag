@@ -10,6 +10,9 @@ uniform float mixFactor;
 
 void main()
 { 
-        outTex = mix(texture(uTex, chTex),uCol,mixFactor);
+        vec4 tex = texture(uTex, chTex);
+        if(tex.a <0.1) discard;
+        outTex = mix(tex,uCol,mixFactor);
+        
   
 }

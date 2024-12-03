@@ -9,3 +9,5 @@ int leftBlinkStartFrame = 0;
 bool rightBlinkActive = false;
 int rightBlinkStartFrame = 0;
 
+int accelerator = 0;
+

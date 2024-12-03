@@ -128,9 +128,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Buffer\VertexBuffer.cpp" />
     <ClCompile Include="Callback\Callback.cpp" />
     <ClCompile Include="Car\car.cpp" />
     <ClCompile Include="Car\TestBed.cpp" />
+    <ClCompile Include="Render\BackgroundRenderer.cpp" />
+    <ClCompile Include="Render\SpeedHandRenderer.cpp" />
     <ClCompile Include="ShaderUtils\Shader.cpp" />
     <ClCompile Include="ShaderUtils\state.cpp" />
     <ClCompile Include="ShaderUtils\Texture.cpp" />
@@ -140,14 +143,20 @@
     <None Include="packages.config" />
     <None Include="ShaderUtils\Shader\basic.frag" />
     <None Include="ShaderUtils\Shader\basic.vert" />
+    <None Include="ShaderUtils\Shader\basicCol.frag" />
+    <None Include="ShaderUtils\Shader\basicCol.vert" />
     <None Include="ShaderUtils\Shader\blink.frag" />
     <None Include="ShaderUtils\Shader\mix.frag" />
     <None Include="ShaderUtils\Shader\transform.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Buffer\VertexBuffer.h" />
     <ClInclude Include="Callback\Callback.h" />
     <ClInclude Include="Car\car.h" />
     <ClInclude Include="Car\TestBed.h" />
+    <ClInclude Include="Render\BackgroundRenderer.h" />
+    <ClInclude Include="Render\BaseRenderer.h" />
+    <ClInclude Include="Render\SpeedHandRenderer.h" />
     <ClInclude Include="ShaderUtils\Shader.h" />
     <ClInclude Include="ShaderUtils\state.h" />
     <ClInclude Include="ShaderUtils\Texture.h" />
@@ -157,7 +166,9 @@
     <Image Include="res\arrow-left.png" />
     <Image Include="res\arrow.png" />
     <Image Include="res\map.jpg" />
+    <Image Include="res\number.png" />
     <Image Include="res\speedometer.png" />
+    <Image Include="res\speed_hand.png" />
     <Image Include="res\visor.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

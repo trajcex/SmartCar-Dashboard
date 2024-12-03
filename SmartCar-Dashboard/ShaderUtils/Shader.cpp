@@ -51,6 +51,8 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
     glDeleteShader(fragment);
 }
 
+
+
 void Shader::checkCompileErrors(unsigned int shader, std::string type) {
     int success;
     char infoLog[1024];
@@ -73,15 +75,15 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type) {
     }
 }
 
-void Shader::use() {
+void Shader::bind() {
     glUseProgram(ID);
 }
 
-void Shader::stop() {
+void Shader::unbind() {
     glUseProgram(0);
 }
 
-void Shader::destroy() {
+Shader::~Shader() {
     if (ID != 0) {
         glDeleteProgram(ID);
         ID = 0;
