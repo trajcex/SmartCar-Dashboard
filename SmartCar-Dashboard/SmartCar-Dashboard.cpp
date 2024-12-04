@@ -125,21 +125,19 @@ int main()
             0.65, -0.87 , 1.0,1.0,
             0.65, -0.97 , 1.0,0.0,
 
-            /*-0.5, -0.87 , 0.0,1.0,
-            -0.5, -0.97 , 0.0,0.0,
-            0.5, -0.87 , 1.0,1.0,
-            0.5, -0.97 , 1.0,0.0,*/
-
-            //-1.5, -0.87 , 0.0,1.0,
-            //-1.5, -0.97 , 0.0,0.0,
-            //-0.5, -0.87 , 1.0,1.0,
-            //-0.5, -0.97 , 1.0,0.0,
-
-
+            
+            //RADIO
             0.5, -0.87 , 0.0,1.0,
             0.5, -0.97 , 0.0,0.0,
             1.2, -0.87 , 1.0,1.0,
             1.2, -0.97 , 1.0,0.0,
+
+            //NAME
+            -1.0, 1.0 , 0.0,1.0,
+            -1.0, 0.8 , 0.0,0.0,
+            -0.3, 1.0 , 1.0,1.0,
+            -0.3, 0.8, 1.0,0.0,
+
         };
         
         VertexBufferLayout textureLayout;
@@ -252,6 +250,8 @@ int main()
 
         Texture visorTexture("res/visor.png");
         basicShader.setFloat("uTex", 0);
+        Texture nameTexture("res/name.png");
+        basicShader.setFloat("uTex", 0);
         basicShader.unbind();
 
         transformShader.bind();
@@ -308,6 +308,11 @@ int main()
             checkerTexture.bind();
             glDrawArrays(GL_TRIANGLE_STRIP, 4, 4);
             checkerTexture.unbind();
+
+            nameTexture.bind();
+            glDrawArrays(GL_TRIANGLE_STRIP, 36, 4);
+            nameTexture.unbind();
+
 
             float speed = car.getSpeed();
             //std::cout << "Speed: " << speed << std::endl;
