@@ -65,7 +65,7 @@ int main()
     glfwMakeContextCurrent(window);
     glfwSetKeyCallback(window, keyCallback);
     glfwSetFramebufferSizeCallback(window, resizeFramebufferCallback);
-    glfwSetWindowSizeLimits(window, wWidth, wHeight, GLFW_DONT_CARE, GLFW_DONT_CARE);
+    glfwSetWindowSizeLimits(window, wWidth, wHeight, wWidth, wHeight);
     glfwSetWindowSizeCallback(window, resizeWindowCallback);
     glfwSetCursorPosCallback(window, cursor_position_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
@@ -77,36 +77,69 @@ int main()
     {
         float vreteces[] = {
 
+            //BACKGROUD
             -1.0,1.0 , 0.0,1.0,
             -1.0,-1.0 , 0.0,0.0,
             1.0,1.0 , 1.0,1.0,
             1.0,-1.0 , 1.0,0.0,
 
+            //SPEEDOMETER
             -1.0, 0.0,  0.0, 1.0,
             -1.0, -1.0,    0.0, 0.0,
             1.0, 0.0,   1.0, 1.0,
             1.0, -1.0,    1.0, 0.0,
 
+            //VISOR
             -0.8,1.0 , 0.0,1.0,
             -0.8,0.4 , 0.0,0.0,
             0.8,1.0 , 1.0,1.0,
             0.8,0.4 , 1.0,0.0,
 
+            //LEFT ARROW
             0.5,-0.15 , 0.0,1.0,
             0.5,-0.3 , 0.0,0.0,
             0.65,-0.15 , 1.0,1.0,
             0.65,-0.3 , 1.0,0.0,
 
+            //SPEEDOMETER ARROW
+            //45
             -0.46, -0.5 , 0.0,1.0,
             -0.22, -0.5 , 0.0,0.0,
             -0.46, -0.52 , 1.0,1.0,
             -0.22, -0.52 , 1.0,0.0,
-
+            //90
             -0.01, -0.1 , 0.0,1.0,
             -0.01, -0.34 , 0.0,0.0,
             0.01, -0.1 , 1.0,1.0,
             0.01, -0.34 , 1.0,0.0,
 
+            //POWER ON
+            0.55, -0.87 , 0.0,1.0,
+            0.55, -0.97 , 0.0,0.0,
+            0.65, -0.87 , 0.5,1.0,
+            0.65, -0.97 , 0.5,0.0,
+
+            //POWER OFF
+            0.55, -0.87 , 0.5,1.0,
+            0.55, -0.97 , 0.5,0.0,
+            0.65, -0.87 , 1.0,1.0,
+            0.65, -0.97 , 1.0,0.0,
+
+            /*-0.5, -0.87 , 0.0,1.0,
+            -0.5, -0.97 , 0.0,0.0,
+            0.5, -0.87 , 1.0,1.0,
+            0.5, -0.97 , 1.0,0.0,*/
+
+            //-1.5, -0.87 , 0.0,1.0,
+            //-1.5, -0.97 , 0.0,0.0,
+            //-0.5, -0.87 , 1.0,1.0,
+            //-0.5, -0.97 , 1.0,0.0,
+
+
+            0.5, -0.87 , 0.0,1.0,
+            0.5, -0.97 , 0.0,0.0,
+            1.2, -0.87 , 1.0,1.0,
+            1.2, -0.97 , 1.0,0.0,
         };
         
         VertexBufferLayout textureLayout;
@@ -152,11 +185,24 @@ int main()
         numberTextureVBO.unbind();
         numberTextureVAO.unbind();
 
+
+        float circle[(NUM_SEGMENTS + 2) * 6];
+        float b[4] = { 1.0, 0.0, 0.0, 0.2 };
+        generateCircleVertices(circle, NUM_SEGMENTS, 0.11, b);
+        VertexArray circleVAO;
+        VertexBuffer circleVBO(circle,sizeof(circle));
+        circleVAO.bind();
+        circleVAO.addBuffer(circleVBO,colorLayout);
+        circleVBO.unbind();
+        circleVAO.unbind();
+
         Shader basicShader((SHADER_PATH + "basic.vert").c_str(), (SHADER_PATH + "basic.frag").c_str());
         Shader mixShader((SHADER_PATH + "basic.vert").c_str(), (SHADER_PATH + "mix.frag").c_str());
         Shader transformShader((SHADER_PATH + "transform.vert").c_str(), (SHADER_PATH + "blink.frag").c_str());
         Shader transformMixShader((SHADER_PATH + "transform.vert").c_str(), (SHADER_PATH + "mix.frag").c_str());
         Shader basicColorShader((SHADER_PATH + "basicCol.vert").c_str(), (SHADER_PATH + "basicCol.frag").c_str());
+        Shader blinkShader((SHADER_PATH + "basicCol.vert").c_str(), (SHADER_PATH + "blinkCol.frag").c_str());
+        Shader radioShader((SHADER_PATH + "radio.vert").c_str(), (SHADER_PATH + "radio.frag").c_str());
 
         mixShader.bind();
         Texture mapTexture("res/map.jpg");
@@ -183,8 +229,19 @@ int main()
 
         transformShader.bind();
         Texture leftArrowTexture("res/arrow.png");
-        basicShader.setFloat("uTex", 0);
+        transformShader.setFloat("uTex", 0);
         transformShader.unbind();
+
+        basicShader.bind();
+        Texture powerButtonTexture("res/power.png");
+        basicShader.setFloat("uTex", 0);
+        basicShader.unbind();
+
+        radioShader.bind();
+        Texture radioTexture("res/radio.png");
+        radioShader.setFloat("uTex", 0);
+        radioShader.unbind();
+
 
         glClearColor(0.5, 0.5, 0.5, 1.0);
 
@@ -192,8 +249,9 @@ int main()
         startSimulation(&car);
         float MAXX = car.getMaxFuelAmount();
         float maxFuel = car.getMaxFuelAmount();
-        std::cout << "MAX FUEL" << MAXX << std::endl;
 
+        float radioPos = 0.0f;
+        float radioPosSecondary = 0.0f;
         while (!glfwWindowShouldClose(window)) {
 
             double currentTime = glfwGetTime();
@@ -330,26 +388,89 @@ int main()
 
             gasFlowVAO.bind();
             basicColorShader.bind();
-            glLineWidth(6.0f);
             basicColorShader.setFloat("uRx", 1.0);
             basicColorShader.setFloat("uRy", 0.8);
             basicColorShader.setFloat("uX", -0.68);
             basicColorShader.setFloat("uY", -0.59);
+            glLineWidth(6.0f);
             glDrawArrays(GL_LINE_STRIP, 0, accelerator);
             basicColorShader.unbind();
             gasFlowVAO.unbind();
 
+            int gear = car.getGear();
+            glm::vec4 blinkColor = getColor(gear);
+            blinkColor.a = 0.0;
+            if (frameCounter % BLINK_INTERVAL_FRAMES < HALF_BLINK_INTERVAL) blinkColor.a = 0.2;
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            circleVAO.bind();
+            blinkShader.bind();
+            blinkShader.setFloat("uRx", 1.0);
+            blinkShader.setFloat("uRy", 0.8);
+            blinkShader.setFloat("uX", 0.675);
+            blinkShader.setFloat("uY", -0.595);
+            blinkShader.setVec4("uCol", blinkColor);
+            glDrawArrays(GL_TRIANGLE_FAN, 0, NUM_SEGMENTS + 2);
+            blinkShader.unbind();
+            circleVAO.unbind();
+            glDisable(GL_BLEND);
+
+
+            glActiveTexture(GL_TEXTURE0);
             numberTextureVAO.bind();
             mixShader.bind();
             numberTexture.bind();
             mixShader.setFloat("mixFactor", 1);
-            int gear = car.getGear();
             mixShader.setVec4("uCol", getColor(gear));
-
             glDrawArrays(GL_TRIANGLE_STRIP, gear * 4, 4);
             numberTexture.unbind();
             mixShader.unbind();
             numberTextureVAO.unbind();
+
+            vao.bind();
+            basicShader.bind();
+            glActiveTexture(GL_TEXTURE0);
+            powerButtonTexture.bind();
+            if (radioOn) {
+                glDrawArrays(GL_TRIANGLE_STRIP, 24, 4);
+            }else{
+                glDrawArrays(GL_TRIANGLE_STRIP, 28, 4);
+            }
+            powerButtonTexture.unbind();
+            basicShader.unbind();
+            vao.unbind();
+
+            if (radioOn) {
+                vao.bind();
+                glActiveTexture(GL_TEXTURE0);
+                radioShader.bind();
+            
+                radioPos -= 0.008;
+                if (radioPos < -2) {
+                    radioPos  = radioPosSecondary;
+                    radioPosSecondary = 0.0;
+                }
+                radioShader.setFloat("uX", radioPos);
+                radioTexture.bind();
+                glDrawArrays(GL_TRIANGLE_STRIP, 32, 4);
+                
+                if (radioPos < -1.0) radioPosSecondary -= 0.008;
+                radioShader.setFloat("uX", radioPosSecondary);
+                radioTexture.bind();
+                glDrawArrays(GL_TRIANGLE_STRIP, 32, 4);
+
+
+                
+                radioTexture.unbind();
+                radioShader.unbind();
+                vao.unbind();
+            }else{
+                radioPos = 0.0;
+                radioPosSecondary = 0.0;
+            }
+
+
+
             frameCounter++;
 
             glfwSwapBuffers(window);

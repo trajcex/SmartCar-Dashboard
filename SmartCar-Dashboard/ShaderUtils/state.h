@@ -11,4 +11,5 @@ extern int rightBlinkStartFrame;
 
 extern int accelerator;
 
+extern bool radioOn;
 #endif

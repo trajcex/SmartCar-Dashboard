@@ -64,6 +64,9 @@
     <None Include="ShaderUtils\Shader\blink.frag" />
     <None Include="ShaderUtils\Shader\basicCol.frag" />
     <None Include="ShaderUtils\Shader\basicCol.vert" />
+    <None Include="ShaderUtils\Shader\blinkCol.frag" />
+    <None Include="ShaderUtils\Shader\radio.frag" />
+    <None Include="ShaderUtils\Shader\radio.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderUtils\Shader.h">

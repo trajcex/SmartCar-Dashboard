@@ -34,6 +34,20 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         if (xpos >= xMin && xpos <= xMax && ypos <= yMax) {
             drawVisor = false;
         }
+
+        float xNormalized = (xpos / width) * 2.0f - 1.0f;
+        float yNormalized = 1.0f - (ypos / height) * 2.0f; 
+
+        float xPowerMin = 0.55f;
+        float xPowerMax = 0.65f;
+        float yPowerMin = -0.97f;
+        float yPowerMax = -0.87f;
+
+        if (xNormalized >= xPowerMin && xNormalized <= xPowerMax &&
+            yNormalized >= yPowerMin && yNormalized <= yPowerMax) {
+            radioOn = !radioOn;
+            //std::cout << "Clicked inside target area!" << std::endl;
+        }
     }
 }
 
@@ -52,9 +66,9 @@ void resizeWindowCallback(GLFWwindow* window, int width, int height)
         newHeight = height;
         newWidth = (int)(height * (16.0f / 9.0f));
     }*/
-    int newSize = std::max(width, height);
+    //int newSize = std::min(width, height);
 
 
-    glfwSetWindowSize(window, newSize, newSize);
+    //glfwSetWindowSize(window, newSize, newSize);
 
 }

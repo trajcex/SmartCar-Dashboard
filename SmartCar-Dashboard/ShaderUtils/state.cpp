@@ -11,3 +11,4 @@ int rightBlinkStartFrame = 0;
 
 int accelerator = 0;
 
+bool radioOn = false;

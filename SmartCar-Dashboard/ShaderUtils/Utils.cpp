@@ -92,3 +92,28 @@ void generateNumber(float* number) {
     }
 
 }
+
+void generateCircleVertices(float* vertices, int numSegmets, float radius, const float color[4]) {
+
+    vertices[0] = 0.0; //Center X
+    vertices[1] = 0.0; //Center Y
+    vertices[2] = color[0]; //Red
+    vertices[3] = color[1]; //Green
+    vertices[4] = color[2]; //Blue
+    vertices[5] = color[3]; //Alpha 
+
+    for (int i = 0; i <= numSegmets; i++)
+    {
+        float angle = 2.0 * M_PI * i / numSegmets;
+
+        vertices[6 + (i * 6)] = radius * cos(angle);
+        vertices[7 + (i * 6)] = radius * sin(angle) + 0.001;
+
+        vertices[8 + (i * 6)] = color[0];
+        vertices[9 + (i * 6)] = color[1];
+        vertices[10 + (i * 6)] = color[2];
+        vertices[11 + (i * 6)] = color[3];
+
+    }
+
+}
