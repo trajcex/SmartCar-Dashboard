@@ -128,7 +128,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Buffer\VertexBuffer.cpp" />
+    <ClCompile Include="ShaderUtils\Utils.cpp" />
+    <ClCompile Include="Vertex\VertexArray.cpp" />
+    <ClCompile Include="Vertex\VertexBuffer.cpp" />
     <ClCompile Include="Callback\Callback.cpp" />
     <ClCompile Include="Car\car.cpp" />
     <ClCompile Include="Car\TestBed.cpp" />
@@ -138,6 +140,7 @@
     <ClCompile Include="ShaderUtils\state.cpp" />
     <ClCompile Include="ShaderUtils\Texture.cpp" />
     <ClCompile Include="SmartCar-Dashboard.cpp" />
+    <ClCompile Include="Vertex\VertexBufferLayout.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -150,7 +153,10 @@
     <None Include="ShaderUtils\Shader\transform.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Buffer\VertexBuffer.h" />
+    <ClInclude Include="ShaderUtils\Utils.h" />
+    <ClInclude Include="Vertex\Vertex.h" />
+    <ClInclude Include="Vertex\VertexArray.h" />
+    <ClInclude Include="Vertex\VertexBuffer.h" />
     <ClInclude Include="Callback\Callback.h" />
     <ClInclude Include="Car\car.h" />
     <ClInclude Include="Car\TestBed.h" />
@@ -161,6 +167,7 @@
     <ClInclude Include="ShaderUtils\state.h" />
     <ClInclude Include="ShaderUtils\Texture.h" />
     <ClInclude Include="ShaderUtils\stb_image.h" />
+    <ClInclude Include="Vertex\VertexBufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\arrow-left.png" />
