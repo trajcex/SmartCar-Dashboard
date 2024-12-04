@@ -13,7 +13,9 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
     case GLFW_KEY_V: if (IsDown) drawVisor = true; break;
     case GLFW_KEY_LEFT: if (IsDown) letfBlinkActive = true; leftBlinkStartFrame = frameCounter; break;
     case GLFW_KEY_RIGHT: if (IsDown) rightBlinkActive = true; rightBlinkStartFrame = frameCounter; break;
-    case GLFW_KEY_G: accelerator += 1; if (accelerator > 100) accelerator = 100; break; 
+    case GLFW_KEY_G: accelerator += 1; if (accelerator > 100) accelerator = 100; break;
+    case GLFW_KEY_UP: if (IsDown) temperature += 1; if (temperature > 30) temperature = 30;  break;
+    case GLFW_KEY_DOWN: if (IsDown) temperature -= 1; if (temperature <0) temperature = 0;  break;
     }
 }
 

@@ -196,6 +196,33 @@ int main()
         circleVBO.unbind();
         circleVAO.unbind();
 
+        float circleCool[(NUM_SEGMENTS + 2) * 6];
+        generateCircleVertices(circleCool, NUM_SEGMENTS, 0.17, b);
+        VertexArray circleCoolVAO;
+        VertexBuffer circleCoolVBO(circleCool, sizeof(circleCool));
+        circleCoolVAO.bind();
+        circleCoolVAO.addBuffer(circleCoolVBO, colorLayout);
+        circleCoolVBO.unbind();
+        circleCoolVAO.unbind();
+
+        float temperture[(30 + 2) * 6];
+        generateArcVertices(temperture, 90.0, 275.0, 30, 0.17, b, false);
+        VertexBuffer tempertureVBO(temperture, sizeof(temperture));
+        VertexArray tempertureVAO;
+        tempertureVAO.bind();
+        tempertureVAO.addBuffer(tempertureVBO, colorLayout);
+        tempertureVBO.unbind();
+        tempertureVAO.unbind();
+
+        float temperture1[(30 + 2) * 6];
+        generateArcVertices(temperture1, 265.0, 450.0, 30, 0.17, b, true);
+        VertexBuffer tempertureVBO1(temperture1, sizeof(temperture1));
+        VertexArray tempertureVAO1;
+        tempertureVAO1.bind();
+        tempertureVAO1.addBuffer(tempertureVBO1, colorLayout);
+        tempertureVBO1.unbind();
+        tempertureVAO1.unbind();
+
         Shader basicShader((SHADER_PATH + "basic.vert").c_str(), (SHADER_PATH + "basic.frag").c_str());
         Shader mixShader((SHADER_PATH + "basic.vert").c_str(), (SHADER_PATH + "mix.frag").c_str());
         Shader transformShader((SHADER_PATH + "transform.vert").c_str(), (SHADER_PATH + "blink.frag").c_str());
@@ -365,9 +392,9 @@ int main()
 
             basicColorShader.bind();
             glLineWidth(11.0f);
-            //float maxFuel = car.getFuelAmount();
+            float maxFuel = car.getFuelAmount();
             //std::cout << "FUEL" << maxFuel << std::endl;
-            if (frameCounter % 2 == 0) {
+        /*    if (frameCounter % 2 == 0) {
                 if (maxFuel == 0.0) {
                     maxFuel = 50.0;
                 }
@@ -375,7 +402,7 @@ int main()
                     maxFuel -= 1;
 
                 }}
-        
+        */
             int fuel = round(50.0 - maxFuel);
 
             basicColorShader.setFloat("uRx", 1.0);
@@ -458,9 +485,6 @@ int main()
                 radioShader.setFloat("uX", radioPosSecondary);
                 radioTexture.bind();
                 glDrawArrays(GL_TRIANGLE_STRIP, 32, 4);
-
-
-                
                 radioTexture.unbind();
                 radioShader.unbind();
                 vao.unbind();
@@ -468,8 +492,75 @@ int main()
                 radioPos = 0.0;
                 radioPosSecondary = 0.0;
             }
+            
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            circleCoolVAO.bind();
+            blinkShader.bind();
+            blinkShader.setFloat("uRx", 0.9);
+            blinkShader.setFloat("uRy", 0.7);
+            blinkShader.setFloat("uX", -0.68);
+            blinkShader.setFloat("uY", -0.595);
+            glm::vec4 blue(0.4f, 0.7f, 1.0f, 0.9f);
+            blinkShader.setVec4("uCol", blue);
+            glDrawArrays(GL_TRIANGLE_FAN, 0,  NUM_SEGMENTS+2);
+            blinkShader.unbind();
+            circleCoolVAO.unbind();
+            glDisable(GL_BLEND);
+
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            tempertureVAO.bind();
+            blinkShader.bind();
+            blinkShader.setFloat("uRx", 0.9);
+            blinkShader.setFloat("uRy", 0.7);
+            blinkShader.setFloat("uX", -0.68);
+            blinkShader.setFloat("uY", -0.595);
+            glm::vec4 red(1.0f, 0.4f, 0.4f, 0.9f);
+            blinkShader.setVec4("uCol", red);
+            glDrawArrays(GL_TRIANGLE_FAN, 0, temperature+1);
+            blinkShader.unbind();
+            tempertureVAO.unbind();
+            glDisable(GL_BLEND);
+
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            tempertureVAO1.bind();
+            blinkShader.bind();
+            blinkShader.setFloat("uRx", 0.9);
+            blinkShader.setFloat("uRy", 0.7);
+            blinkShader.setFloat("uX", -0.68);
+            blinkShader.setFloat("uY", -0.595);
+            blinkShader.setVec4("uCol", red);
+            glDrawArrays(GL_TRIANGLE_FAN, 0, temperature+1);
+            blinkShader.unbind();
+            tempertureVAO1.unbind();
+            glDisable(GL_BLEND);
 
 
+            glActiveTexture(GL_TEXTURE0);
+            numberTextureVAO.bind();
+            transformMixShader.bind();
+            numberTexture.bind();
+            int rezultat1 = temperature / 10;   
+            int rezultat2 = temperature % 10;
+            if (temperature > 15) {
+                transformMixShader.setVec4("uCol", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+            }
+            else {
+                transformMixShader.setVec4("uCol", glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+            }
+            glm::mat4 modelT = glm::mat4(1.0f);
+            modelT = glm::translate(modelT, glm::vec3(-1.32, 0.0, 0.0));
+            transformMixShader.setMat4("model", modelT);
+            transformMixShader.setFloat("mixFactor", 1);
+            glDrawArrays(GL_TRIANGLE_STRIP, 4*rezultat2, 4);
+            modelT = glm::translate(modelT, glm::vec3(-0.06, 0.0, 0.0));
+            transformMixShader.setMat4("model", modelT);
+            glDrawArrays(GL_TRIANGLE_STRIP, 4*rezultat1, 4);
+            numberTexture.unbind();
+            transformMixShader.unbind();
+            numberTextureVAO.unbind();
 
             frameCounter++;
 

@@ -12,5 +12,6 @@ void drawArc(float startAngleDeg, float endAngleDeg, int numSegments, float radi
 glm::vec4 getColor(int gear);
 void generateNumber(float* number);
 void generateCircleVertices(float* vertices, int numSegmets, float radius, const float color[4]);
+void generateArcVertices(float* vertices, float startAngleDeg, float endAngleDeg, int numSegments, float radius, const float color[4], bool reverse);
 
 #endif 

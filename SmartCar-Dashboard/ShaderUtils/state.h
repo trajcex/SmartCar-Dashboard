@@ -10,6 +10,7 @@ extern bool rightBlinkActive;
 extern int rightBlinkStartFrame;
 
 extern int accelerator;
+extern int temperature;
 
 extern bool radioOn;
 #endif

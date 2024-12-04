@@ -117,3 +117,35 @@ void generateCircleVertices(float* vertices, int numSegmets, float radius, const
     }
 
 }
+void generateArcVertices(float* vertices, float startAngleDeg, float endAngleDeg, int numSegments, float radius, const float color[4], bool reverse) {
+    // Center
+    vertices[0] = 0.0f; // Center X
+    vertices[1] = 0.0f; // Center Y
+    vertices[2] = color[0]; // Red
+    vertices[3] = color[1]; // Green
+    vertices[4] = color[2]; // Blue
+    vertices[5] = color[3]; // Alpha
+
+    float startAngle = startAngleDeg * M_PI / 180.0f;
+    float endAngle = endAngleDeg * M_PI / 180.0f;
+
+    for (int i = 0; i < numSegments; i++) {
+        float angle;
+
+        if (reverse) {
+            angle = endAngle + (startAngle - endAngle) * i / numSegments;  // Reverse angle calculation
+        }
+        else {
+            angle = startAngle + (endAngle - startAngle) * i / numSegments;  // Normal angle calculation
+        }
+
+        vertices[6 + (i * 6)] = radius * cos(angle);  // X coordinate
+        vertices[7 + (i * 6)] = radius * sin(angle);  // Y coordinate
+
+        // Color
+        vertices[8 + (i * 6)] = color[0];
+        vertices[9 + (i * 6)] = color[1];
+        vertices[10 + (i * 6)] = color[2];
+        vertices[11 + (i * 6)] = color[3];
+    }
+}
